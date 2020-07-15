@@ -1,0 +1,116 @@
+<div class="container">
+    <br><br>
+    <mat-card-title>Einstellungen</mat-card-title>
+    <mat-card>
+        <mat-checkbox [(ngModel)]="generateAddress">IP-Addresse automatisch generieren</mat-checkbox>
+        <br><br>
+        Präfixlänge =
+        <mat-form-field id="gen-pol">
+            <input matInput type="number" [(ngModel)]="prefixLength" pattern="^[8-9]|1[0-9]|2[0-9]|30$">
+            <mat-error>Präfix zwischen länge 8 und 30 wählen</mat-error>
+        </mat-form-field>
+        <br><br>
+        Neue Aufgabe generieren:
+        <img src="../../../assets/reload.png" alt="" class="reload-button" (click)="onGenerateNewAufgabe()">
+    </mat-card>
+    <br><br>
+    <mat-card-title>Eingabe <img src="../../../assets/info.png" alt="" class="info-icon" #tooltip="matTooltip"
+        matTooltip="Die IP Addresse sowie die Präfixlänge ist vorgegeben. Es können Netzmaske, 
+        Netzaddresse und Broadcastaddresse eingegeben werden. Die entsprechenden Lösungen werden nur berechnet, wenn eine
+        Eingabe erfolgt ist."
+        matTooltipPosition="right"
+        matTooltipHideDelay="500">
+    </mat-card-title>
+    
+    <mat-card>
+        <form (ngSubmit)="calcAddress(f)" #f='ngForm'>
+
+            <mat-form-field id="address-cidr-input" class="cidr-input">
+                <mat-label>IP Addresse (CIDR Schreibweise)</mat-label>
+                <input matInput type="text" name="addressCidr" [(ngModel)]="addressCidr" 
+                [disabled]="generateAddress"
+                pattern="^(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]?)$"
+                autocomplete="off"
+                (change)="onChangeAddressInput()">
+                <mat-error>Eingabe ist keine gültige IP Addresse</mat-error>
+            </mat-form-field>
+            <mat-form-field id="address-bit-input" class="bit-input">
+                <mat-label>IP Addresse (Bit Schreibweise)</mat-label>
+                <input matInput type="text" name="addressBit" [(ngModel)]="addressBit"
+                ng-change="onLeaveAddressInput()"
+                disabled
+                autocomplete="off">
+            </mat-form-field>
+            <br>
+            <mat-form-field id="netzmaske-cidr-input" class="cidr-input">
+                <mat-label>Netzmaske (CIDR Schreibweise)</mat-label>
+                <input matInput type="text" name="netzMaskCidr" [(ngModel)]="netzMaskCidr" 
+                autocomplete="off"
+                pattern="^(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]?)$|^$"
+                (change)="onChangeNetmask()"
+                [ngClass]="{'red-background': solutionFarbeNetMask==1, 'green-background':solutionFarbeNetMask==2, '':solutionFarbeNetMask==0}">
+                <mat-error>Eingabe ist keine gültige IP Addresse</mat-error>
+            </mat-form-field>
+            <mat-form-field id="netzmaske-bit-input" class="bit-input" >
+                <mat-label>Netzmaske (Bit Schreibweise)</mat-label>
+                <input matInput type="text" name="netzMaskBit" [(ngModel)]="netzMaskBit"
+                disabled
+                autocomplete="off" >
+            </mat-form-field>
+            <br>
+            <mat-form-field id="netzaddresse-cidr-input" class="cidr-input">
+                <mat-label>Netzaddresse (CIDR Schreibweise)</mat-label>
+                <input matInput type="text" name="netzAddresseCidr" [(ngModel)]="netzAddresseCidr" 
+                autocomplete="off"
+                pattern="^(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]?)$|^$"
+                (change)="onChangeNetAddress()"
+                [ngClass]="{'red-background': solutionFarbeNetAddress==1, 'green-background':solutionFarbeNetAddress==2, '':solutionFarbeNetAddress==0}">
+                <mat-error>Eingabe ist keine gültige IP Addresse</mat-error>
+            </mat-form-field>
+            <mat-form-field id="netzaddresse" class="bit-input" >
+                <mat-label>Netzaddresse (Bit Schreibweise)</mat-label>
+                <input matInput type="text" name="netzAddresseBit" [(ngModel)]="netzAddresseBit"
+                disabled
+                autocomplete="off" >
+            </mat-form-field>
+            <br>
+            <mat-form-field id="broadcast-cidr-input" class="cidr-input">
+                <mat-label>Broadcastaddresse (CIDR Schreibweise)</mat-label>
+                <input matInput type="text" name="broadcastAddresseCidr" [(ngModel)]="broadcastAddresseCidr" 
+                autocomplete="off"
+                pattern="^(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]?)$|^$"
+                (change)="onChangeBroadcastAddress()"
+                [ngClass]="{'red-background': solutionFarbeBroadcastAddress==1, 'green-background':solutionFarbeBroadcastAddress==2, '':solutionFarbeBroadcastAddress==0}">
+                <mat-error>Eingabe ist keine gültige IP Addresse</mat-error>
+            </mat-form-field>
+            <mat-form-field id="broadcastAddresse" class="bit-input" >
+                <mat-label>Broadcastaddresse (Bit Schreibweise)</mat-label>
+                <input matInput type="text" name="broadcastAddresse" [(ngModel)]="broadcastAddresseBit"
+                disabled
+                autocomplete="off" >
+            </mat-form-field>
+            <br><br>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    Lösung anzeigen
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <br>
+                <br><br>
+                Netzmaske (Cidr): <span class="green-color"> {{netzMaskSolutionCidr}} </span>,
+                 Netzmaske (Bit): <span class="green-color"> {{netzMaskSolutionBit}} </span>
+                <br>
+                Netzaddresse (Cidr): <span class="green-color"> {{netzAddresseSolutionCidr}} </span>,
+                 Netzaddresse (Bit): <span class="green-color"> {{netzAddresseSolutionBit}} </span>
+                <br>
+                Broadcastaddresse (Cidr): <span class="green-color"> {{broadcastAddresseSolutionCidr}} </span>, 
+                 Broadcastaddresse (Bit): <span class="green-color"> {{broadcastAddresseSolutionBit}} </span>
+              </mat-expansion-panel>
+            <br><br>
+            <button class="standard-button" type="submit" [disabled]="!f.valid">Lösung berechnen!</button>
+        </form>
+    </mat-card>
+    
+
+</div>

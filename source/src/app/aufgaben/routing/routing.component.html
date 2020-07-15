@@ -1,0 +1,61 @@
+<div class="container">
+    <br><br>
+    <mat-card-title>Einstellungen</mat-card-title>
+    <mat-card>
+        Aufgabenschwierigkeit:
+        <br><br>
+        <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+            <mat-button-toggle (click)="onEasy();" value="easy" checked="true">Einfach</mat-button-toggle>
+            <mat-button-toggle (click)="onMiddle();" value="middle">Mittel</mat-button-toggle>
+            <mat-button-toggle (click)="onDifficult();" value="difficult">Schwierig</mat-button-toggle>
+          </mat-button-toggle-group>
+          <br>
+        <br><br>
+        Neue Aufgabe generieren:
+        <img src="../../../assets/reload.png" alt="" class="reload-button" (click)="onGenerateNewAufgabe()">
+    </mat-card>
+    <br><br>
+    <mat-card-title>Eingabe <img src="../../../assets/info.png" alt="" class="info-icon" #tooltip="matTooltip"
+        matTooltip="Die IP Addresse ist vorgegeben. Es muss der passende Eintrag in der Routing Tabelle ausgewählt werden. "
+        matTooltipPosition="right"
+        matTooltipHideDelay="500">
+    </mat-card-title>
+    
+    <mat-card>
+        <div class="row">
+            <div class="column-30">
+                IP Addresse: 
+                <br><br> {{ipAddress}}
+            </div>
+            <div class="column-30">
+                Prüfen Sie, zu welchem Eintrag in <br>der Routing Tabelle, die IP Addresse passt.
+            </div>
+            <div class="column-40">
+                Routing Tabelle:
+                <table #table mat-table class="full-width" [dataSource]="subnetList">
+                    <ng-container matColumnDef="ip-address">
+                       <th class="table-data-column" mat-header-cell *matHeaderCellDef> Subnetz Addresse </th>
+                       <td class="table-data-column" mat-cell *matCellDef="let address"> {{address.value}}/{{address.prefix}} </td>
+                   </ng-container>
+                   
+                   <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+                   <tr mat-row #row class="table-row" *matRowDef="let address; columns: columnsToDisplay"
+                   (click)="onSelectAddress(address,row)" [ngStyle]="{'background-color': (address.selected ? 'green' : '')}">
+                       
+                   </tr>
+               </table>
+            </div>
+        </div>
+        <div id="solution-div">
+            {{solutionText}}
+            <br>
+            Subnetz der IP Addresse: {{solutionSubnetBit}}
+            <br>
+            Ausgewähltes Subnetz: {{selectedSubnetBit}}
+        </div>
+       <br><br>
+       <button class="standard-button" (click)="onClickSolution();">Lösung berechnen</button>
+    </mat-card>
+    
+
+</div>

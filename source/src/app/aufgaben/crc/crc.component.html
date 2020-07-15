@@ -1,0 +1,71 @@
+<div class="container">
+    <br><br>
+    <mat-card-title>Einstellungen</mat-card-title>
+    <mat-card>
+        <mat-checkbox [(ngModel)]="generateDaten">Daten automatisch generieren</mat-checkbox>
+        <br><br>
+        <mat-checkbox [(ngModel)]="generatePolynom">Generator polynom automatisch generieren</mat-checkbox>
+        <br><br>
+        <!-- Generator polynom von Grad n =
+        <mat-form-field id="gen-pol">
+            <input disabled="true" matInput type="number" ngModel pattern="^[1-5]$"> (currently disabled)
+            <mat-error>Polynom zwischen grad 1 und 5 wählen</mat-error>
+        </mat-form-field> -->
+        <br><br>
+        Neue Aufgabe generieren:
+        <img src="../../../assets/reload.png" alt="" class="reload-button" (click)="onGenerateNewAufgabe()">
+    </mat-card>
+    <br><br>
+    <mat-card-title>Eingabe</mat-card-title>
+    <mat-card>
+        <form (ngSubmit)="calcCRC(f)" #f='ngForm'>
+            <mat-form-field id="daten-input" >
+                <mat-label>Daten (Ohne Füll Bit)</mat-label>
+                <input matInput type="text" name="daten" [(ngModel)]="daten" [disabled]="generateDaten" pattern="^1[0|1]*$"
+                autocomplete="off">
+                <mat-error>Daten müssen mit 1 anfangen und in binär sein</mat-error>
+            </mat-form-field>
+            :
+            <mat-form-field id="gen-pol-input">
+                <mat-label>Generatorpolynom</mat-label>
+                <input matInput type="text" name="gen-pol" [(ngModel)]="generatorPolynom" [disabled]="generatePolynom" pattern="^1[0|1]*$"
+                autocomplete="off">
+                <mat-error>Generatorpolynom muss mit 1 anfangen und in binär sein</mat-error>
+            </mat-form-field>
+            = 
+            <mat-form-field id="summe" >
+                <mat-label>Prüfsumme</mat-label>
+                <input matInput type="text" name="summe" [(ngModel)]="summe" [value]='prufsumme'
+                autocomplete="off" [ngClass]="{'red-background': summeFarbe==1, 'green-background':summeFarbe==2, '':summeFarbe==0}">
+            </mat-form-field>
+                         
+            <img src="../../../assets/info.png" alt="" class="info-icon" #tooltip="matTooltip"
+            matTooltip="Wenn die Prüfsumme nicht eingetragen wird, wird die berechnete Prüfsumme 
+            nach Klick auf 'Lösung berechnen' angezeigt.
+            Wird Sie ausgefüllt, wird Sie entweder Rot, oder Grün hinterlegt, je nachdem ob Sie richtig war oder nicht."
+            matTooltipPosition="right"
+            matTooltipHideDelay="500">
+
+            <span *ngIf="summeFarbe==1">Angegebene Prüfsumme ist falsch</span>
+            <br><br>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    Lösungsweg anzeigen
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <br>Die Füllbits wurden ergänzt. Für ein <br> 
+                Generatorpolynom von Grad N = x, werden x Füllbits an die Daten angehängt.
+                <br><br>
+                {{datenMitFullBit}}: <span class="red-color">{{generatorPolynom}}</span> 
+                <div *ngFor="let item of solutionWeg; let i = index" [ngClass]="{'red-color underline': 1 === i % 2}">
+                     <span class="color-white">{{solutionWegPrefixe[i]}}</span>{{item}}
+                </div>
+              </mat-expansion-panel>
+            <br><br>
+            <button class="standard-button" type="submit" [disabled]="!f.valid">Lösung berechnen!</button>
+        </form>
+    </mat-card>
+    
+
+</div>

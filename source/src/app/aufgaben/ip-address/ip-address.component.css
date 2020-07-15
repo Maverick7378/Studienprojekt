@@ -1,0 +1,16 @@
+
+.bit-input{
+    width:60%;
+    margin-left:5%;
+}
+#address-cidr-input{
+    width:30%;
+    
+}
+.cidr-input{
+    width:30%;
+    
+}
+.info-icon{
+    top:6px;
+}

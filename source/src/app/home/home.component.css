@@ -1,0 +1,44 @@
+.container{
+    padding: auto;
+    text-align:center;
+    height: 100%;
+}
+.aufgaben-selector{
+    background-color: #193058;
+    color: white;
+    float:left;
+    margin: 3%;
+    height: 20vh;
+    width: 80%;
+    box-shadow: 0px 0px 1px 1px rgb(85, 85, 85);
+}
+.aufgaben-selector > img{
+    height: 60%;
+    width: 100%;
+    object-fit: cover;
+    object-position: top;
+}
+.aufgaben-selector>h2{
+    text-align: center;
+    padding-top: 0px;
+}
+@media only screen and (min-width: 900px) {
+    /* For desktop: */
+    .aufgaben-selector{
+        height: 500px;
+        width: 25%;
+        transition: transform 1s;
+        
+    }
+    .aufgaben-selector:hover{
+        cursor: pointer;
+        transform: scale(1.05);
+    }
+    .aufgaben-selector>h2{
+        padding-top: 10px;
+    }
+    .coming-soon:hover{
+        transform: none !important;
+        cursor: not-allowed;
+    }
+  }

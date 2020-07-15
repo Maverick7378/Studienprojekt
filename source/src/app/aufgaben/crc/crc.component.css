@@ -1,0 +1,21 @@
+
+#gen-pol{
+    width:10%;
+}
+#daten-input{
+    width: 40%;
+}
+#gen-pol-input{
+    width: 20%;
+}
+#summe{
+    width: 10%;
+}
+.underline{
+    text-decoration: underline;
+    text-decoration-color: black;
+}
+.color-white{
+    color:white;
+    text-decoration:none;
+}
